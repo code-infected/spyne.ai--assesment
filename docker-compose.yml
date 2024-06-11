@@ -1,0 +1,47 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+
+  user-service:
+    build: ./user-service
+    volumes:
+      - ./user-service:/app
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgresql://user:password@db/mydatabase"
+
+  discussion-service:
+    build: ./discussion-service
+    volumes:
+      - ./discussion-service:/app
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgresql://user:password@db/mydatabase"
+
+  interaction-service:
+    build: ./interaction-service
+    volumes:
+      - ./interaction-service:/app
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgresql://user:password@db/mydatabase"
+
+  search-service:
+    build: ./search-service
+    volumes:
+      - ./search-service:/app
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgresql://user:password@db/mydatabase"
